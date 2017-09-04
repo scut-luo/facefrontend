@@ -1,0 +1,11 @@
+{% extends "console/base.html" %}
+
+{% block title %}DashBoard{% endblock %}
+
+{% block page_content %}
+<div class="container">
+  <h1>Dashboard</h1>
+  <hr>
+  <h3>Welcome, {{ current_user.username }}</h3>
+</div>
+{% endblock %}

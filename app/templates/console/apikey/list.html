@@ -1,0 +1,59 @@
+{% extends "console/base.html" %}
+
+{% block child_styles %}
+{{ super() }}
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.15/datatables.min.css" /> {% endblock %} {% block scripts %} {{ super() }}
+{% endblock %}
+
+
+{% block child_scripts %}
+{{ super() }}
+<script type="text/javascript"
+        src="https://cdn.datatables.net/v/dt/dt-1.10.15/datatables.min.js">
+</script>
+<script>
+var apikeys = {{ api_keys | tojson }}
+$(document).ready(function() {
+  var table = $('#api_list').DataTable({
+    data: apikeys,
+    columnDefs: [{
+      targets: -1,
+      data: null,
+      defaultContent: "<button>View</button>"
+    }]
+  });
+  $('#api_list tbody').on('click', 'button', function() {
+        var data = table.row($(this).parents('tr')).data();
+        window.location.href="{{url_for('console.apikey_view', api_key='')}}" + data[1]  
+    });
+});
+</script>
+{% endblock %}
+
+
+{% block page_content %}
+{% if user == current_user %}
+<div class="row">
+  <div class="col-md-12">
+    <div class="btn-group" style="padding-top: 20px; padding-bottom: 20px;">
+      <a href="{{ url_for('console.apikey_create') }}"
+         class="btn btn-info">Create API Key</a>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <table width="100%" class="table table-striped table-bordered table-hover"
+           id="api_list">
+      <thead>
+        <tr>
+          <th>Application Name</th>
+          <th>API Key</th>
+          <th>Operation</th>
+        </tr>
+      </thead>
+    </table>
+  </div>
+</div>
+{% endif %}
+{% endblock %}
